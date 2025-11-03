@@ -11,8 +11,9 @@ import java.util.List;
 public class CustomerService {
 
     //initialisation de la liste des Customers
-    static List <Customer> customers = List.of(new Customer(0, "Leïla", "Popelier", LocalDate.of(2016,06,28),"A1B2C3D78"),
-            new Customer(1, "Raphaël", "Makaryan", LocalDate.of(2004, 02,10), "A1B2C3D79"));
+    static List <Customer> customers = new ArrayList<>();
+            //new Customer(0, "Leïla", "Popelier", LocalDate.of(2016,06,28),"A1B2C3D78"),
+            //new Customer(1, "Raphaël", "Makaryan", LocalDate.of(2004, 02,10), "A1B2C3D79"));
 
     //méthode pour fournir la liste des Customers
     public List<Customer> getCustomers() { return customers; }

@@ -24,13 +24,13 @@ public class CustomersController {
         return ResponseEntity.ok().body(customerService.getCustomer(customerId));
     }
 
-    @PostMapping("/customer/addCustomer")
+    @PostMapping("/addCustomer")
     public ResponseEntity<Customer> addingCustomer(@Validated @RequestBody Customer customer) {
         customerService.addingCustomer(customer);
         return ResponseEntity.status(HttpStatus.CREATED).body(customer);
     }
 
-    @PutMapping("/customer/toModifyCustomer/{id}")
+    @PutMapping("/toModifyCustomer/{id}")
     public ResponseEntity<Customer> toModifyCustomer(@PathVariable(value = "id") int customerId, @Validated @RequestBody Customer customer) {
         Customer customerUpdated = customerService.toModifyCustomer(customerId, customer);
         return ResponseEntity.ok(customerUpdated);
