@@ -1,10 +1,11 @@
 package com.vehiclerental.springbootapplication;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,7 +31,15 @@ public class CustomerService {
 
     //méthode pour ajouter un Customer
     public void addingCustomer(Customer customer) {
-        customers.add(customer);
+        RestTemplate restTemplate = new RestTemplate();
+        String apiUrl = "http://localhost:8081/licenses/drivingLicense?customerId=" + customer.getId();
+         boolean result = restTemplate.getForObject(apiUrl, Boolean.class);
+
+         if (result) {
+             customers.add(customer);
+         } else {
+             throw new IllegalArgumentException("The drivingLicense is not valid !");
+         }
     }
 
     //méthode pour modifier un Customer
