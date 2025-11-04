@@ -12,7 +12,9 @@ public class CustomersController {
 
     private final CustomerService customerService;
 
-    public CustomersController(CustomerService customerService) { this.customerService = customerService; }
+    public CustomersController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @GetMapping("/customers")
     public ResponseEntity<List<Customer>> displayCustomers() {
@@ -37,13 +39,8 @@ public class CustomersController {
     }
 
     @DeleteMapping("/deleteCustomer/{id}")
-    public ResponseEntity<Customer> deleteCustomer (@PathVariable(value = "id") int customerId) {
-        for (int i = 0; i < customerService.getCustomers().size(); i++) {
-            if (customerService.getCustomers().get(i).getId() == customerId) {
-                customerService.deleteCustomer(customerService.getCustomers().get(i));
-                return new ResponseEntity<Customer>(HttpStatus.GONE);
-            }
-        }
-        return null;
+    public ResponseEntity deleteCustomer(@PathVariable(value = "id") int customerId) {
+        customerService.deleteCustomer(customerId);
+        return ResponseEntity.ok("The Customer are deleted");
     }
 }

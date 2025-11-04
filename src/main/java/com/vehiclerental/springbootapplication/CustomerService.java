@@ -11,57 +11,55 @@ import java.util.List;
 @Service
 public class CustomerService {
 
+    @Autowired
+    CustomerRepository customerRepository;
+
     //initialisation de la liste des Customers
-    static List <Customer> customers = new ArrayList<>();
-            //new Customer(0, "Leïla", "Popelier", LocalDate.of(2016,06,28),"A1B2C3D78"),
-            //new Customer(1, "Raphaël", "Makaryan", LocalDate.of(2004, 02,10), "A1B2C3D79"));
+    static List<Customer> customers = new ArrayList<>();
+
 
     //méthode pour fournir la liste des Customers
-    public List<Customer> getCustomers() { return customers; }
+    public List<Customer> getCustomers() {
+        return customerRepository.findAll();
+    }
 
     //méthode pour fournir la liste d'un Customer selon son id
     public Customer getCustomer(int id) {
-        for (int i = 0; i < customers.size() ; i++ ) {
-            if (customers.get(i).getId() == id) {
-                customers.get(i).setId(0);
-            }
-        }
-        return null;
+        //for (int i = 0; i < customers.size(); i++) {
+        //    if (customers.get(i).getId() == id) {
+        //        customers.get(i).setId(0);
+        //    }
+        return customerRepository.findById(id);
     }
 
     //méthode pour ajouter un Customer
     public void addingCustomer(Customer customer) {
         RestTemplate restTemplate = new RestTemplate();
-        String apiUrl = "http://localhost:8081/licenses/drivingLicense?customerId=" + customer.getId();
-         boolean result = restTemplate.getForObject(apiUrl, Boolean.class);
-
-         if (result) {
-             customers.add(customer);
-         } else {
-             throw new IllegalArgumentException("The drivingLicense is not valid !");
-         }
+        String apiUrl = "http://localhost:8081/licenses/drivingLicense?customerId=" + customer.getDrivingLicense();
+        boolean result = restTemplate.getForObject(apiUrl, Boolean.class);
+        if (result) {
+            System.out.println(customer);
+            customerRepository.save(customer);
+        } else {
+            throw new IllegalArgumentException("The drivingLicense is not valid !");
+        }
     }
 
     //méthode pour modifier un Customer
-    public Customer toModifyCustomer(int id, Customer updatedCustomer) {
-        for (int i = 0; i < customers.size() ; i++ ) {
-            Customer existingCustomer = customers.get(i);
-
-            if (existingCustomer.getId() == id) {
-                existingCustomer.setId(existingCustomer.getId());
-                existingCustomer.setFirstName(existingCustomer.getFirstName());
-                existingCustomer.setLastName(existingCustomer.getLastName());
-                existingCustomer.setDateOfBirth(existingCustomer.getDateOfBirth());
-                existingCustomer.setDrivingLicense(existingCustomer.getDrivingLicense());
-
-                return existingCustomer;
-            }
-        }
-        throw new RuntimeException("Client with ID " + id + " not found.");
+    public Customer toModifyCustomer(int idCustomerActual, Customer customerBodyRequest) {
+        Customer existingCustomer = customerRepository.findById(idCustomerActual);
+        existingCustomer.setId(idCustomerActual);
+        existingCustomer.setFirstName(customerBodyRequest.getFirstName());
+        existingCustomer.setLastName(customerBodyRequest.getLastName());
+        existingCustomer.setDateOfBirth(customerBodyRequest.getDateOfBirth());
+        existingCustomer.setDrivingLicense(customerBodyRequest.getDrivingLicense());
+        customerRepository.save(existingCustomer);
+        return existingCustomer;
     }
 
+
     //méthode pour supprimer un Customer
-    public void deleteCustomer(Customer customer) {
-        customers.remove(customer);
+    public void deleteCustomer(int id) {
+        customerRepository.deleteById(id);
     }
 }

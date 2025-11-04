@@ -1,15 +1,24 @@
 package com.vehiclerental.springbootapplication;
 
 import java.time.LocalDate;
-import java.util.Date;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
 public class Customer {
+
     /////////////////////ATTRIBUTS/////////////////////
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected int id;
     protected String firstName;
     protected String lastName;
     protected LocalDate dateOfBirth;
     protected String drivingLicense;
+
+
 
     /////////////////////CONSTRUCTEUR/////////////////////
     public Customer(int id, String firstName, String lastName, LocalDate dateOfBirth, String drivingLicense) {
@@ -19,6 +28,11 @@ public class Customer {
         this.dateOfBirth = dateOfBirth;
         this.drivingLicense = drivingLicense;
     }
+
+    public Customer() {
+    }
+
+
 
     /////////////////////GETTER/////////////////////
     public int getId() { return id;}
